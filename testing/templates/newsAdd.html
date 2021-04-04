@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans 'Добавить новость' %}
+{% endblock %}
+{% block content %}
+    <div class="newsAdd">
+        <h3 class="head_title">{% trans 'Добавить новость' %}</h3>
+        <form action="" class="newsAddForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="display:flex;justify-content:center;margin: auto; cursor:pointer;">
+                        <input name="img" id="file" type="file" onchange="onFileSelected(event, this)" style="display:none;">
+                        <label for="file" style="border-radius:100%;cursor: pointer" for="photo">
+                            <img id="image_news" src="{% static 'img/notPicture.png' %}" style="background-color: #a2a2a2;
+        width: 180px;
+        height: 140px;
+        border: 1px solid #d6d6d6;
+        color: #ffd891;
+        margin: 3px;
+        transition: background-color .3s;
+    }" alt="">
+                        </label>
+                    </div>
+            <div class="newsFormItem"><label for="">RU</label><input name="title_ru" type="text"></div>
+            <div class="newsFormItem"><label for="">KK</label><input name="title_kk" type="text"></div>
+            <div class="newsFormItem"><label for="">EN</label><input name="title_en" type="text"></div>
+            <div class="newsFormItem"><label for="">Контент(RU)</label><textarea name="content_ru" id="content_ru" cols="30" rows="10"></textarea></div>
+            <div class="newsFormItem"><label for="">Контент(KK)</label><textarea name="content_kk" id="content_kk" cols="30" rows="10"></textarea></div>
+            <div class="newsFormItem"><label for="">Контент(EN)</label><textarea name="content_en" id="content_en" cols="30" rows="10"></textarea></div>
+            <button type="submit" class="signButton">Добавить</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script>
+        CKEDITOR.replace('content_ru');
+        CKEDITOR.replace('content_kk');
+        CKEDITOR.replace('content_en');
+    </script>
+    <script>
+        function onFileSelected(event, r) {
+          var selectedFile = event.target.files[0];
+          var reader = new FileReader();
+
+          var imgtag = document.getElementById("image_news");
+
+          if (r.files.length === 0){
+            imgtag.src = "{% static 'img/notPicture.png' %}";
+          }
+
+          imgtag.title = selectedFile.name;
+
+          reader.onload = function(event) {
+            imgtag.src = event.target.result;
+          };
+
+          reader.readAsDataURL(selectedFile);
+             console.log(selectedFile);
+        }
+    </script>
+{% endblock %}

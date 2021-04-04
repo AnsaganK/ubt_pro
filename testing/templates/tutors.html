@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+    Преподаватели
+{% endblock %}
+{% block content %}
+    <div>
+        {% if tutors %}
+        <ul class="tutors">
+            {% for i in tutors %}
+                <li class="tutor"><img width="200px" src="{{ i.photo.url }}" alt=""><a href="">{{ i.last_name }} {{ i.first_name }} {{ i.patronymic }}</a></li>
+            {% endfor %}
+        {% for i in tutors %}
+                <li class="tutor"><img width="200px" src="{{ i.photo.url }}" alt=""><a href="">{{ i.last_name }} {{ i.first_name }} {{ i.patronymic }}</a></li>
+            {% endfor %}
+        {% for i in tutors %}
+                <li class="tutor"><img width="200px" src="{{ i.photo.url }}" alt=""><a href="">{{ i.last_name }} {{ i.first_name }} {{ i.patronymic }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p class="Error404">Не найдено</p>
+        {% endif %}
+    </div>
+{% endblock %}

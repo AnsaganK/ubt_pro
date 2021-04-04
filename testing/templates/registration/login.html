@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+    <p style="text-align:center;">Вы авторизованы перейдите на <a href="/">главную</a></p>
+
+{% else %}
+        <div class="sign">
+        <h2 class="loginTitle">Вход</h2>
+            <form action="{% url 'login' %}?next={% if test_slug %}{{ test_slug }}{% else %}/{% endif %}" method="post">
+                {% csrf_token %}
+                <div class="formRow"><label for="login">Логин</label><input type="text" name="username" id="login"></div>
+                <div class="formRow"><label for="password">Пароль</label><input type="password" name="password" id="password"></div>
+                <button type="submit" class="signButton">Отправить</button>
+            </form>
+        </div>
+        <a href="{% url 'signup' %}" class="register">Нет аккаунта, зарегистрируйтесь</a>
+{% endif %}
+{% endblock %}

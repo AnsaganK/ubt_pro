@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if page %}
+        {{ page.content }}
+    {% else %}
+        <p class="Error404">Данная страница еще не создана</p>
+    {% endif %}
+{% endblock %}

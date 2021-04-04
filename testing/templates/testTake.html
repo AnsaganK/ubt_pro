@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+{% block head %}
+<style>
+.tabs>label {
+      display: inline-block;
+      text-align: center;
+      vertical-align: middle;
+      user-select: none;
+      background-color: #eee;
+      border: 1px solid transparent;
+      padding: 2px 8px;
+      font-size: 16px;
+      line-height: 1.5;
+      border-radius: 4px;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+      width:27px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+.tabs>label:first-of-type {
+      margin-left: 0;
+    }
+.tabs>input[type="radio"] {
+      display: none;
+      width:35px;
+    }
+
+    .tabs>input[type="radio"]:checked+label {
+      background-color: #bdbdbd;
+    }
+
+.tabs>div {
+        display: none;
+    border: 1px solid #aabdff;
+    padding: 10px 15px;
+    box-shadow: 0px 0px 9px #dcdcdc;
+    border-radius: 4px;
+}
+
+{% for i in test.questions.all %}
+    #tab-btn-{{ forloop.counter }}:checked~#content-{{ forloop.counter }}{
+      display: block;
+    }
+    {% endfor %}
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="modal">
+        Вы хотите завершить тестирование
+    </div>
+<form method="post" action="{% url 'testResult' %}">
+        {% csrf_token %}
+    <input type="text" name="testId" style="visibility: hidden" value="{{ test.id }}">
+            <div class="tabs">
+                {% for i in test.questions.all %}
+                    <input type="radio" name="tab-btn" id="tab-btn-{{ forloop.counter }}" value="" {% if forloop.counter == 1 %} checked {% endif %}>
+                    <label data-tab-question-id="{{ i.pk }}" for="tab-btn-{{ forloop.counter }}">{{ forloop.counter }}</label>
+                {% endfor %}
+                {% for i in test.questions.all %}
+                <div id="content-{{ forloop.counter }}">
+                    <span class="questionNumber">Вопрос {{ forloop.counter }}</span><br> <br>  {{ i.text|safe }}
+                <hr>
+                        <ul class="answerList">
+                                {% for k in i.answers.all|randomAnswers %}
+                                    <li><input data-question-id="{{ i.pk }}" class="answerCheck" type="{% if i.high %}checkbox{% else %}radio{% endif %}" id="{{ i.id }}_{{ k.id }}" name="{{ i.id }}" value="{{ k.id }}"><label class="answers" for="{{ i.id }}_{{ k.id }}" >{% if k.img %}
+                                        <img src="{{ k.img.url }}" alt=""><br>{% endif %}{{ k.text|safe }}</label></li>
+                                {% endfor %}
+                        </ul>
+                    </div>
+            {% endfor %}
+                <button type="submit" onclick="showConfirm('{% url 'testResult' %}')" style="
+    background-color: #f56f6f;
+    border-color: #ff6d6d;
+    box-shadow: 0px 0px 2px #636363;
+    border: 0px;
+    color: #ffffff;
+    float: right;
+    padding: 10px;
+    cursor: pointer;
+    margin: 20px;
+">Завершить</button>
+            </div>
+        </form>
+{% endblock %}
+{% block script %}
+    <script>
+        answers = document.querySelectorAll('input[data-question-id]');
+        let id;
+        for (let i=0; i<answers.length; i++) {
+            id = answers[i].getAttribute('data-question-id');
+            console.log(answers[i])
+            answers[i].addEventListener('change', editChangeColor);
+        }
+            function editChangeColor() {
+                let id = this.getAttribute('data-question-id');
+                console.log(id)
+                tabs = document.querySelectorAll('label[data-tab-question-id="' + id + '"]');
+                for (let i = 0; i < tabs.length; i++) {
+                    console.log(tabs[i])
+                    tabs[i].style.backgroundColor = "#ff9847";
+                }
+            }
+    </script>
+{% endblock %}

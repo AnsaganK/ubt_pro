@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+{{ test.user.first_name }} {{ test.user.last_name }} | {{ test.test.lesson.title }}
+{% endblock %}
+
+{% block head %}
+    <style>
+        .resultQuestion{
+           border: 1px solid #4f85ff;
+    border-radius: 10px;
+    margin: 10px auto;
+    padding: 10px;
+    box-shadow: 0px 0px 5px #a9a9a9b8;
+        }
+        .resultQuestion span.text{
+
+        }
+        .questionAnswers{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin:auto;
+            text-align: center;
+            width: 100%;
+        }
+        .check{
+            word-wrap: break-word;
+            width: 40%;
+        }
+        .right{
+            word-wrap: break-word;
+            width: 40%;
+        }
+        .isRight{
+            max-width: 90%;
+            width: fit-content;
+            background-color: #1aff1a66;
+            padding: 7px 14px;
+            margin: 10px auto;
+            border-radius: 10px;
+        }
+        .isFail{
+            max-width: 90%;
+            width: fit-content;
+            background-color: #ff3a3a54;
+            padding: 7px 14px;
+            margin: 10px auto;
+            border-radius: 10px;
+        }
+        .rightAnswer{
+            max-width: 90%;
+            width: fit-content;
+            background-color: #9a9aff6e;
+            padding: 7px 14px;
+            margin: 10px auto;
+            border-radius: 10px;
+        }
+        .titleAnswer{
+            margin:10px auto;
+        }
+        .ball{
+            text-align: center;
+            margin:auto;
+            display: block;
+            width:20px;
+            height:20px;
+            padding: 10px;
+        }
+        .gt_null{
+            border-radius: 100%;
+            background-color: #1aff1a66;
+        }
+        .eq_null{
+            border-radius: 100%;
+            background-color: #ff3a3a54;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="resultQuestionList">
+    <p style="
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    background-color: #ffa156;
+    width: 250px;
+">{% trans 'Набрано баллов: ' %}{{ test.result }}/{% if test.test.lesson.countQuestion == "35" %}{{ test.test.lesson.countQuestion|add:"10"}}{% else %}{{ test.test.lesson.countQuestion}}{% endif %}</p>
+        {% for i in test.schema.questions %}
+            <div class="resultQuestion">
+                <span>{% trans 'Вопрос' %}{{ i.questionNumber }}:</span><br>
+                <span class="text">{{ i.question|safe }}</span>
+            <hr>
+                    <span class="ball {% if i.ball > 0 %}gt_null{% else %}eq_null{% endif %}">{% if i.ball > 0 %}+{% endif %}{{ i.ball }}</span>
+
+                <div class="questionAnswers">
+                    <div class="check">
+                        <span class="titleAnswer">{% trans 'Отмеченные' %}</span>
+                        {% for i in i.answerCheckIn %}
+                            <div class="checkAnswer {% if i.isRight %}isRight{% else %}isFail{% endif %}">{% if i.image %}
+                                <img width="100px" src="{{ i.image}}" alt=""><br>{% endif %}{{ i.text }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="right">
+                    <span class="titleAnswer">{% trans 'Правильные' %}</span>
+                        {% for i in i.answerRightIn %}
+                            <div class="rightAnswer">{% if i.image %}
+                                <img width="100px" src="{{ i.image}}" alt=""><br>{% endif %}{{ i.text }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

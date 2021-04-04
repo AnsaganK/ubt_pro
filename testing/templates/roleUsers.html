@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block head %}
+    <style>
+        table {
+            width: 100%;
+            margin-top: 25px;
+        }
+
+        th {
+            background-color: #ffc271;
+            color: white;
+        }
+
+        tr, td {
+            border: 1px solid #ff7c0b;
+        }
+
+        td, th {
+            text-align: center;
+            padding: 10px 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+        <table>
+            <tr>
+                <th>{% trans 'ФИО' %}</th>
+                <th>{% trans 'Дата регистрации' %}</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        <a href="{% url 'testForUser' user.pk %}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
+                    </td>
+                    <td>{{ user.user.date_joined }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+{% endblock %}

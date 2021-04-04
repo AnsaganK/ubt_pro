@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ group.name }}
+{% endblock %}
+
+{% block content %}
+    {% for user in users %}
+        {{ user.username }}
+    {% endfor %}
+{% endblock %}

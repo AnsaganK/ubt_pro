@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <style>
+    table{
+            border: 3px solid #88c3ff;
+    padding: 5px;
+    width: 100%;
+    color: #444444;
+    text-align: center;
+    }
+    tr, td, th{
+            border: 1px solid #91d8ff;
+    padding: 5px;
+    }
+    tr:hover td{
+        color: #ffa344;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% if tests %}
+    <table>
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>Предмет</th>
+        <th>Код теста</th>
+        <th>Пользователь</th>
+        <th>Набрано баллов</th>
+        <th>Дата</th>
+        <th>Результат</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for test in tests %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ test.test.lesson.title }}</td>
+            <td>{% if test.test.code %}{{ test.test.code }}{% else %}Код не найден{% endif %}</td>
+            <td>{{ test.user.last_name }} {{ test.user.first_name }}</td>
+            <td>{{ test.result }}</td>
+            <td>{{ test.date }}</td>
+            <td><a href="{{ test.get_absolute_url }}" class="viewResultLink">Посмотреть</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+        {% else %}
+        <p class="Error404">Данный тест еще не был пройден</p>
+    {% endif %}
+{% endblock %}

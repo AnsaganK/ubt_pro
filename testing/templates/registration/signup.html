@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Регистрация
+{% endblock %}
+
+{% block content %}
+    <div class="createUser">
+        <form action="{% url 'signup' %}" method="post">
+            {% csrf_token %}
+            <h3 class="formTitle">Регистрация</h3>
+            {% if userFound %}
+                <p class="errorForm">Пользователь с логином {{ userFound }} уже существует</p>
+            {% endif %}
+            {% if emailFound %}
+                <p class="errorForm">Пользователь с такой почтой уже существует</p>
+            {% endif %}
+            {% if passwordCheck %}
+                <p class="errorForm">Пароли не совпадают</p>
+            {% endif %}
+            <div class="formItem"><label for="">Логин</label><input type="text" name="username" required></div>
+            <div class="formItem"><label for="">Имя</label><input type="text" name="first_name" required></div>
+            <div class="formItem"><label for="">Фамилия</label><input type="text" name="last_name" required></div>
+            <div class="formItem"><label for="">Эл.почта</label><input type="email" name="email" required></div>
+            <div class="formItem"><label for="">Пароль</label><input type="text" name="password1" required></div>
+            <div class="formItem"><label for="">Пароль(повтор)</label><input type="text" name="password2" required>
+            </div>
+            <button type="submit" class="signButton">Создать аккаунт</button>
+        </form>
+    </div>
+    <a href="{% url 'login' %}" class="register">Вход</a>
+{% endblock %}

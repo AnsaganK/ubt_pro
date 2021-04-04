@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <style>
+        .userGroups {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .userGroup {
+            width: 200px;
+            margin: 10px auto;
+            height: 80px;
+            border-radius: 5px;
+            border: 1px solid cornflowerblue;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .userGroupTitle {
+            height: 21px;
+            width: 100%;
+            padding: 5px;
+            display: block;
+        }
+
+        .userGroupCount {
+            width: 101%;
+            display: flex;
+            border-radius: 3px;
+            flex-grow: 1;
+            background-color: #609fd9;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="createUser">
+        <form action="{% url 'groupCreate' %}" method="post">
+            {% csrf_token %}
+            <h3 class="formTitle">Добавление группы</h3>
+            <div class="formItem" style="justify-content: center"><input type="text" placeholder="Название" name="name"
+                                                                         required></div>
+            <button type="submit" class="signButton">Создать</button>
+        </form>
+    </div>
+    <hr>
+    <ul class="userGroups">
+        {% for group in groups %}
+            <li class="userGroup"><span class="userGroupTitle"><a
+                    href="{{ group.get_absolute_url }}">{{ group.name }}</a></span><span
+                    class="userGroupCount">{{ group.users.count }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

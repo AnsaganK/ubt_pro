@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Добавить предмет
+{% endblock %}
+
+{% block content %}
+<div class="createUser">
+        <form action="{% url 'lessonAdd' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+            <h3 class="formTitle">Добавление предмета</h3>
+            <div class="formItem"><label for="title">Название предмета</label><input type="text" name="title" required></div>
+            <div class="formItem"><label for="photo">Картинка предмета</label><input type="file" name="photo" required></div>
+            <div class="formItem"><label for="basic">Основной предмет</label><input  style="box-shadow: 0px 0px" type="checkbox" name="basic"></div>
+            <div class="formItem">
+                <label for="countQuestion">Количество вопросов</label>
+                <select name="countQuestion" id="">
+                {% for c in count %}
+                    <option value="{{ c.0 }}">{{ c.1 }}</option>
+                {% endfor %}
+            </select>
+            </div>
+                <button type="submit" class="signButton">Добавить</button>
+        </form>
+    </div>
+{% endblock %}

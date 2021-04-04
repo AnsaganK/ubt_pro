@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ lesson.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="lesson_edit">
+            <h3 class="content_title">Изменить предмет</h3>
+            <form action="{% url 'lessonEdit' lesson.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="formItem" style="flex-direction: column">
+                    <label for="">RU</label>
+                    <input type="text" name="title_ru" value="{{ lesson.title_ru }}" required>
+                </div>
+                <div class="formItem" style="flex-direction: column">
+                    <label for="">KK</label>
+                    <input type="text" name="title_kk" value="{{ lesson.title_kk }}" required>
+                </div>
+                <div class="formItem" style="flex-direction: column">
+                    <label for="">EN</label>
+                    <input type="text" name="title_en" value="{{ lesson.title_en }}" required>
+                </div>
+
+                <div class="formItem">
+                    <select name="countQuestion" id="">
+                        {% for c in count %}
+                            <option value="{{ c.0 }}" {% if lesson.countQuestion == c.0 %}selected{% endif %}>{{ c.1 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="formItem">
+                    <div style="display:flex;justify-content:center;margin: auto; cursor:pointer;">
+                        <input name="photo" id="file" type="file" onchange="onFileSelected(event, this)" style="display:none;" value="photoUsers/pp_q8SHcls.jpg">
+                        <label for="file" style="border-radius:100%;cursor: pointer" for="photo">
+                            <img id="image_user" src="{{ lesson.photo.url }}" style="background-color: #517494;
+        width: 180px;
+        height: 140px;
+        border: 1px solid #d6d6d6;
+        color: #ffd891;
+        margin: 3px;
+        transition: background-color .3s;
+    }" alt="">
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="signButton">Изменить</button>
+            </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        function onFileSelected(event, r) {
+          var selectedFile = event.target.files[0];
+          var reader = new FileReader();
+
+          var imgtag = document.getElementById("image_user");
+
+          if (r.files.length === 0){
+            imgtag.src = "{{ lesson.photo.url }}";
+          }
+
+          imgtag.title = selectedFile.name;
+
+          reader.onload = function(event) {
+            imgtag.src = event.target.result;
+          };
+
+          reader.readAsDataURL(selectedFile);
+             console.log(selectedFile);
+        }
+    </script>
+{% endblock %}

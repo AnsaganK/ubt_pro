@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for test in code.tests.all %}
+            <li><a href="{{ test.get_absolute_url }}">{{ test.lesson.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

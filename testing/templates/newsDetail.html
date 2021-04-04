@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ news.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="news_detail">
+        <h4 class="content_title">{{ news.title }}</h4>
+        {% if news.img %}<img style="float: right" width="360px" src="{{ news.img.url }}" alt="">{% else %}{% endif %}
+        {{ news.content|safe }}
+    </div>
+{% endblock %}

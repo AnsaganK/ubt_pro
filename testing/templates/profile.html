@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    Профиль
+{% endblock %}
+
+{% block content %}
+    <div class="profile">
+        {% include 'include/profileInfo.html' %}
+        <div class="userResult">
+            {% if request.user|isGroup:'Ученик' %}
+                <h3 class="profileTitle">Пройденные тесты</h3>
+                {% if request.user.tests.all %}
+                    <div class="profileTests">
+                        {% for test in request.user.tests.all %}
+                            <a href="{{ test.get_absolute_url }}">
+                                <div class="profileTest">
+                                    <div class="profileTestInfo">
+                                        <div class="lineProfileTest">{{ test.test.lesson.title }} |
+                                            {% if test.test.lesson.code %}{{ test.test.lesson.code }}{% else %}
+                                                #000{% endif %}
+                                        </div>
+                                        <div class="dateProfileTest">
+                                            {{ test.date|dateTransform }}
+                                        </div>
+                                    </div>
+                                    <div class="profileTestResult">
+                                        <span>{{ test.result }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="Error404">{% trans 'У вас еще нет пройденных тестов' %}</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% load static i18n %}
+
+<div class="userInfo">
+    <img class="profilePhoto"
+         src="{% if user.photo %}{{ user.photo.url }}{% else %}{% static 'img/anonym.png' %}{% endif %}" alt="">
+    <hr>
+    <div class="textInfo"><span>{% trans 'Ник' %}:</span><span>{{ request.user.username }}</span></div>
+    <div class="textInfo"><span>{% trans 'Имя' %}:</span><span>{{ request.user.first_name }}</span></div>
+    <div class="textInfo"><span>{% trans 'Фамилия' %}:</span><span>{{ request.user.last_name }}</span></div>
+    <div class="textInfo"><span>{% trans 'Дата рождения' %}:</span><span>{{ request.user.profile.birth_date }}</span>
+    </div>
+    <div class="textInfo"><span>{% trans 'Почта' %}:</span><span>{{ request.user.email }}</span></div>
+    {% if teacher %}
+        <div class="textInfo"><span>{% trans 'Предмет' %}:</span><span>{% for i in lessons %}{{ i.title }}{% empty %}Нет предмета{% endfor %}</span></div>
+    {% endif %}
+    <div class="textInfo"><a href="" class="editProfileLink">Редактировать</a></div>
+</div>

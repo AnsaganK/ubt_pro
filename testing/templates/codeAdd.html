@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans 'Коды тестов' %}
+{% endblock %}
+{% block head %}
+    <style>
+    .codesForTests{
+            display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    }
+    .code{
+     padding: 9px 16px;
+    background-color: #39a6ff;
+    margin: 10px;
+    font-size: 18px;
+    color: white;
+    border-radius: 10px;
+        height: fit-content;
+    }
+    .addCode{
+        display: flex;
+            width: 230px;
+    border-left: 7px solid #adbaff;
+    padding: 18px;
+}
+    </style>
+{% endblock %}
+{% block content %}
+    <h3 class="content_title">{% trans 'Коды для тестов' %}</h3>
+    <div style="display: flex; justify-content: space-between">
+    <div class="codesForTests">
+        {% for code in codes %}
+            <div class="code"><a href="{{ code.get_absolute_url }}">{{ code }}</a></div>
+        {% endfor %}
+    </div>
+    <div class="addCode">
+        <form action="{% url 'codeAddForm' %}" method="post" style="display:flex; flex-direction: column; align-items: center">
+            {% csrf_token %}
+            <label for="">Код</label><input type="text" name="code">
+            <button type="submit" class="signButton">Добавить</button>
+        </form>
+    </div>
+    </div>
+{% endblock %}

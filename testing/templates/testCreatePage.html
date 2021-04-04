@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block head %}
+<style>
+
+    </style>
+{% endblock %}
+<!--<div style="    z-index: 10;
+    display: inline-block;
+    text-align: center;
+    margin: 10px auto;
+    transition: all 0.5s;
+    height:0px;
+">
+                            <img src="{% static 'img/712.gif' %}" alt="">
+                        </div>-->
+
+{% block title %}
+    Создать тест
+{% endblock %}
+
+{% block content %}
+    <h3 class="lessonTitle">{{ name }}</h3>
+    <form action="{% url 'testSave' id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+        <select name="codeTest" id="codeTest">
+            {% for code in codes %}
+                <option value="{{ code.id }}">{{ code.number }}</option>
+            {% endfor %}
+        </select>
+        <!--
+            <ul class="questionHref">
+            {% for i in easyQuestions %}
+                    <li><a href="#testItem_{{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            {% for i in hardQuestions %}
+                    <li><a href="#testItem_{{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            </ul>-->
+            <div id="testInputs" style="text-align: center">
+                {% for i in easyQuestions %}
+                <div class="testItem" id="testItem_{{ i }}" data-question-id="{{ i }}" style="">
+                    <div class="testItemQuestion"><label for="">Вопрос {{ i }} </label>
+                        <textarea type="text" class="ckeditor" name="question_{{i}}" style="max-width:100%;" id="question_{{i}}"></textarea>
+                    </div>
+                    <div id="testItemVariants_{{ i }}">
+                        <div class="testItemVariant"><label for="">1)</label><input type="radio" checked data-variant-id="1" class="checkVariant" value="{{ i }}_1" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_1" id="variant_{{ i }}_1"></textarea>
+                              <label for="img_{{ i }}_1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_1" class="img_answer" name="img_{{ i }}_1" type="file" />
+                        </div>
+                        <div class="testItemVariant"><label for="">2)</label><input type="radio" data-variant-id="2" class="checkVariant" value="{{ i }}_2" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_2" id="variant_{{ i }}_2"></textarea>
+                            <label for="img_{{ i }}_2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                                  </label>
+                                  <input id="img_{{ i }}_2"  class="img_answer" name="img_{{ i }}_2" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">3)</label><input type="radio" data-variant-id="3" class="checkVariant" value="{{ i }}_3" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_3" id="variant_{{ i }}_3"></textarea>
+                            <label for="img_{{ i }}_3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                                  </label>
+                              <input id="img_{{ i }}_3" class="img_answer" name="img_{{ i }}_3" type="file" />
+                        </div>
+                        <div class="testItemVariant"><label for="">4)</label><input type="radio" data-variant-id="4" class="checkVariant" value="{{ i }}_4" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_4" id="variant_{{ i }}_4"></textarea>
+                            <label for="img_{{ i }}_4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                                  </label>
+                              <input id="img_{{ i }}_4" class="img_answer" name="img_{{ i }}_4" type="file" />
+                        </div>
+                        <div class="testItemVariant"><label for="">5)</label><input type="radio" data-variant-id="5" class="checkVariant" value="{{ i }}_5" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_5" id="variant_{{ i }}_5"></textarea>
+                             <label for="img_{{ i }}_5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_5" class="img_answer" name="img_{{ i }}_5" type="file" />
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% for i in hardQuestions %}
+                <div class="testItem" id="testItem_{{ i }}" data-question-id="{{ i }}" style="">
+                    <div class="testItemQuestion"><label for="">Вопрос {{ i }} </label>
+                        <textarea type="text" class="ckeditor" name="question_{{i}}_high" style="max-width:100%;"  id="question_{{ i }}"></textarea></div>
+                    <div id="testItemVariants_{{ i }}">
+                        <div class="testItemVariant"><label for="">1)</label><input type="checkbox" data-variant-id="1" class="checkVariant" value="{{ i }}_1" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_1"></textarea>
+                            <label for="img_{{ i }}_1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_1" class="img_answer" name="img_{{ i }}_5" type="file" />
+                        </div>
+                        <div class="testItemVariant"><label for="">2)</label><input type="checkbox" data-variant-id="2" class="checkVariant" value="{{ i }}_2" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_2"></textarea>
+                            <label for="img_{{ i }}_2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_2" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">3)</label><input type="checkbox" data-variant-id="3" class="checkVariant" value="{{ i }}_3" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_3"></textarea>
+                            <label for="img_{{ i }}_3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_3" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">4)</label><input type="checkbox" data-variant-id="4" class="checkVariant" value="{{ i }}_4" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_4"></textarea>
+                            <label for="img_{{ i }}_4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_4" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">5)</label><input type="checkbox" data-variant-id="5" class="checkVariant" value="{{ i }}_5" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_5"></textarea>
+                            <label for="img_{{ i }}_5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_5" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">6)</label><input type="checkbox" data-variant-id="6" class="checkVariant" value="{{ i }}_6" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_6"></textarea>
+                            <label for="img_{{ i }}_6">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_6" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">7)</label><input type="checkbox" data-variant-id="7" class="checkVariant" value="{{ i }}_7" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_7"></textarea>
+                            <label for="img_{{ i }}_7">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_7" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                        <div class="testItemVariant"><label for="">8)</label><input type="checkbox" data-variant-id="8" class="checkVariant" value="{{ i }}_8" name="r_{{i}}"><textarea type="text" class="answer_area" name="variant_{{ i }}_8"></textarea>
+                            <label for="img_{{ i }}_8">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12-5.373-12-12-12-12 5.373-12 12zm18-1h-4v7h-4v-7h-4l6-6 6 6z"/></svg>
+                              </label>
+                              <input id="img_{{ i }}_8" class="img_answer" name="img_{{ i }}_5" type="file" />
+                            </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    <button style="
+    padding: 10px;
+    color: white;
+    background-color: #609fd9;
+    border: 1px solid #c9c9c9;
+    cursor: pointer;
+    margin: 20px auto;
+    /* margin: auto; */
+    display: block;">Создать тест</button>
+    </form>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'ckeditor5_803_2/build/ckeditor.js' %}"></script>
+<script>
+    function InitEditor(elementID) {
+        ClassicEditor
+            .create(document.getElementById(elementID), {
+				toolbar: {
+					items: [
+						'CKFinder',
+						'heading',
+						'|',
+						'bold',
+						'italic',
+						'link',
+						'bulletedList',
+						'numberedList',
+						'|',
+						'outdent',
+						'indent',
+						'|',
+						'imageUpload',
+						'blockQuote',
+						'insertTable',
+						'mediaEmbed',
+						'undo',
+						'redo',
+						'|',
+						'specialCharacters',
+						'MathType',
+						'ChemType'
+					]
+				},
+				language: 'ru',
+				image: {
+					toolbar: [
+						'imageTextAlternative',
+						'imageStyle:full',
+						'imageStyle:side'
+					]
+				},
+				table:
+                    {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				},
+				licenseKey: '',
+			} )
+			.then( editor => {
+				window.editor = editor;
+			} )
+			.catch( error => {
+				console.error( 'Oops, something went wrong!' );
+				console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+				console.warn( 'Build id: 5k7erug91vr0-csfefjwb1hv8' );
+				console.error( error );
+			} );}
+    {% for i in easyQuestions %}
+        InitEditor("question_{{ i }}");
+    {% endfor %}
+    {% for i in hardQuestions %}
+        InitEditor("question_{{ i }}");
+    {% endfor %}
+
+let allInputImg = document.querySelectorAll('.img_answer');
+let index, input;
+
+
+for (index = 0; index<allInputImg.length; index++) {
+    let input = allInputImg[index];
+    input.addEventListener('change', uploadImg);
+}
+
+function uploadImg(event){
+    let label = this.previousElementSibling;
+    let label_svg = label.children[0];
+    if (this.files.length>0){
+        label_svg.style.fill = '#3fde1c';
+        label.title = this.files[0].name;
+    }else{
+        label_svg.style.fill = 'grey';
+        label.title = '';
+    }
+    console.log("change: ",this.files);
+}
+</script>
+
+{% endblock %}

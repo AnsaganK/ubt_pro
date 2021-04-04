@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+{{ user }} | {% trans 'Тесты' %}
+{% endblock %}
+
+{% block content %}
+    {% if user.tests.all %}
+        {% for i in user.tests.all %}
+            {{ i.result }}
+        {% endfor %}
+    {% else %}
+        <p class="Error404">{% trans 'Данный пользователь еще не проходил тестирование' %}</p>
+    {% endif %}
+{% endblock %}

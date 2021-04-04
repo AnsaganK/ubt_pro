@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+{% load i18n %}
+{% block title %}
+    Пользователи
+{% endblock %}
+{% block head %}
+    <style>
+        .roles {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .role {
+            width: 200px;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            margin: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .role a {
+            border-radius: 5px;
+            background-color: #3e5982;
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            transition: background-color .3s ease;
+        }
+
+        .role a:hover {
+            background-color: #ffaa86;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+
+    {% if request.user|isGroup:"Админ" %}
+        <div style="display: flex;justify-content: flex-end;align-items: end;"><a href="{% url 'groups' %}"
+                                                                                  class="createTestButton">Группы
+            учеников</a><a
+                href="{% url 'userCreate' %}" style="margin: 0px 5px" class="createTestButton">Добавить пользователя</a>
+        </div>
+    {% endif %}
+    <ul class="roles">
+        {% for role in roles %}
+            <li class="role"><a href="{% url 'roleUsers' role.pk %}">{{ role.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <!--
+
+    -->
+{% endblock %}

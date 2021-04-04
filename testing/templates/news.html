@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    Новости
+{% endblock %}
+
+{% block content %}
+    {% if request.user|isGroup:"Админ" %}<a href="{% url 'newsAdd' %}" class="createTestButton">Добавить новость</a>
+                {% endif %}
+    <div class="news">
+        <ul class="news_list">
+            {% for news_item in news_list %}
+            <li class="news_item">
+                <img src="{% if news_item.img %}{{ news_item.img.url }}{% else %}{% static 'img/notPicture.png' %}{% endif %}" alt="">
+                <div class="news_content">
+                    <a href="{{ news_item.get_absolute_url }}" class="news_title">{% if news_item.title %}{{ news_item.title }}{% else %}{% trans 'Нет названия' %}{% endif %}</a>
+                    <div class="news_text">
+                        {{ news_item.content|striptags|shortContent }}
+                    </div>
+                </div>
+            </li>
+                {% empty %}
+                <p class="Error404">{% trans 'Пока нет созданных новостей' %}</p>
+            {% endfor %}
+        </ul>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

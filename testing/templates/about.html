@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+
+{% block title %}
+    О нас
+{% endblock %}
+
+{% block content %}
+    {% if request.user|isGroup:"Админ" %}<a href="{% url 'newsAdd' %}" class="createTestButton">Изменить страницу</a>
+                {% endif %}
+    {% if title %}
+        <h2 class="lessonTitle">{{ title }}</h2>
+        {{ content|safe }}
+    {% else %}
+        <p class="Error404">Данная страница еще не создана</p>
+    {% endif %}
+{% endblock %}

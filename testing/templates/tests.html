@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+
+{% block content %}
+    <h3 class="lessonTitle">{{ lesson.title }}</h3>
+    {% if request.user|isGroup:"Админ" %}<a href="{% url 'testCreatePage' lesson.pk %}" class="createTestButton">Создать тест</a>
+                {% endif %}
+    <ul class="tests">
+    {% for i in lesson.tests.all %}
+        <li class="test"><a href="{{ i.get_absolute_url }}">#{% if i.code %}{{ i.code }}{% else %}000{% endif %}</a>{% if request.user|isGroup:"Админ" %}
+            <a href="{% url 'testResultUserList' i.pk %}" class="result_test_button" {% if i.users.count == 0 %}disabled style="cursor: default;pointer-events: none;color: grey !important;">Не пройден{% else %}>Результаты{% endif %}</a>{% endif %}</li>
+        {% empty %}
+        <p class="Error404">Пока нет созданных тестов</p>
+    {% endfor %}
+    </ul>
+{% endblock %}
