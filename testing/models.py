@@ -125,7 +125,7 @@ class Code(models.Model):
 
 class CodeGroups(models.Model):
     code = models.ForeignKey(Code, on_delete=models.CASCADE, related_name="groups")
-    users = models.ManyToManyField(User, related_name="codeGroups")
+    #users = models.ManyToManyField(User, related_name="codeGroups")
     group = models.ForeignKey("UserGroups", on_delete=models.CASCADE, related_name="codes")
     dateCreate = models.DateTimeField(auto_now_add=True)
     dateUpdate = models.DateTimeField(auto_now=True)

@@ -1,13 +1,89 @@
 {% extends 'base.html' %}
+{% load UBT_PRO_tags %}
+
+
 {% block title %}
     Список ЕНТ
 {% endblock %}
 
+{% block head %}
+    <style>
+        .labelItem {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            width: 300px;
+            text-align: center;
+            margin: 10px auto;
+        }
+
+        .inputItem {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            width: 300px;
+        }
+
+        .labelItem select, .inputItem input {
+            height: 30px;
+            font-size: 15px;
+            text-align: center;
+            border: 1px solid #71aaff;
+        }
+
+        .formWrapper {
+            float: right;
+            margin: 30px auto;
+            width: min-content;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 3px #a7a7a7;
+        }
+
+        .wrapEnt {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .entList {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+
+            justify-content: center;
+        }
+
+        .entItem {
+            border: 1px solid #757575;
+            background-color: #efefef;
+            border-radius: 5px;
+            width: 200px;
+            height: 80px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+        .entCreate {
+            height: min-content;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    {% if admin %}
-        <a href="{% url 'examsCreate' %}" class="createTestButton">Добавить экзамен</a>
-    {% endif %}
-    {% for ent in ents %}
-        {{ ent.number }}
-    {% endfor %}
+    <div class="wrapEnt">
+        <div class="entList">
+            {% for ent in ents %}
+                <div class="entItem">{{ ent.code }}<br>{{ ent.group }}<br>{{ ent.dateStart }}</div>
+            {% endfor %}
+        </div>
+        {% if admin %}
+            <div class="entCreate">
+                {% include 'include/examAdd.html' %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

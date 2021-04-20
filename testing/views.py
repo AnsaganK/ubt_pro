@@ -2,7 +2,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import Group, User
 from django.shortcuts import render, redirect
 
-from .forms import UserForm, LessonForm, NewsForm, UserGroupsForm
+from .forms import UserForm, LessonForm, NewsForm, UserGroupsForm, ENTForm
 from .models import Test, Question, Answer, Lesson, Tutors, Pages, UserTests, News, Code, UserGroups, CodeGroups, Role
 
 
@@ -41,8 +41,8 @@ def uslugi(request):
 
 
 def testCreatePage(request, pk):
-    codes = Code.objects.all()
     lesson = Lesson.objects.get(pk=pk)
+    codes = Code.objects.exclude(tests__lesson=lesson)
     if lesson.countQuestion == "35":
         easyQuestion = 25
         hardQuestion = 10
@@ -161,7 +161,7 @@ def userCreate(request):
             user.save()
             return redirect("about")
         else:
-            #print(form.errors)
+            # print(form.errors)
             roles = Role.objects.all()
             return render(request, "userCreatePage.html",
                           {"groups": roles, "userFound": userFound, "passwordCheck": passwordCheck,
@@ -329,7 +329,15 @@ def codesAdd(request):
 
 def codeLessons(request, pk):
     code = Code.objects.get(pk=pk)
-    return render(request, 'codeLessons.html', {"code": code})
+    basicLessons = Test.objects.filter(code=code).filter(lesson__basic=True).all()
+    changeLessons = Test.objects.filter(code=code).exclude(lesson__basic=True).all()
+    # notSelectLessons = Test.objects.filter(code=code).all()
+    notSelectLessons = Lesson.objects.exclude(tests__code=code).all()
+    # basicLessons = Lesson.objects.filter(basic=True).filter(tests__code__in=code).all()
+    # lessons = Lesson.objects.exclude(basic=True).filter(tests__code__in=code).all()
+    # notSelectLessons = Lesson.objects.exclude(tests__code__in=code)
+    return render(request, 'codeLessons.html',
+                  {"basicLessons": basicLessons, "changeLessons": changeLessons, "notSelectLessons": notSelectLessons, "code": code})
 
 
 def groups(request):
@@ -358,8 +366,10 @@ def entList(request):
     user = request.user
     roleAdmin = Role.objects.filter(name_ru="Админ").first()
     if roleAdmin == user.profile.role:
+        codes = Code.objects.all()
+        userGroups = UserGroups.objects.all()
         ents = CodeGroups.objects.all()
-        return render(request, 'entList.html', {"ents": ents, "admin": True})
+        return render(request, 'entList.html', {"ents": ents, "admin": True, "codes": codes, "userGroups": userGroups})
     role = Role.objects.filter(name_ru="Гость").first()
     if user.is_authenticated and role != user.profile.role:
         group = user.userGroups.all().first()
@@ -368,12 +378,19 @@ def entList(request):
         ents = Code.objects.filter(trial=True)
     return render(request, 'entList.html', {"ents": ents})
 
+
 def entCreate(request):
-    codes = Code.objects.all()
-    userGroups = UserGroups.objects.all()
-    return render(request, "entCreate.html", {"codes": codes, "userGroups": userGroups})
+     if request.method == "POST":
+        form = ENTForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('exams')
+        else:
+            print(form.errors)
+     return redirect('exams')
+
 
 def roleUsers(request, pk):
     role = Role.objects.get(pk=pk)
     users = role.users.all()
-    return render(request, "roleUsers.html", {"title": role.name,"users": users})
+    return render(request, "roleUsers.html", {"title": role.name, "users": users})

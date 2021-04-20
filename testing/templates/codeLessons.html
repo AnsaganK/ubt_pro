@@ -1,14 +1,52 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <style>
+        .codeLessons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .codeLesson {
+            min-width: 200px;
+            /* height: 0px; */
+            background-color: #ef952f;
+            color: white;
+            padding: 15px 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px;
+        }
+    </style>
+{% endblock %}
+
 {% block title %}
 
 {% endblock %}
 
 {% block content %}
-    <ul>
-        {% for test in code.tests.all %}
-            <li><a href="{{ test.get_absolute_url }}">{{ test.lesson.title }}</a></li>
+    <h4>Основные</h4>
+    <ul class="codeLessons">
+        {% for i in basicLessons %}
+            <li class="codeLesson"><a href="{{ i.get_absolute_url }}">{{ i.lesson.title }}</a></li>
+        {% empty %}
+            <p class="Error404">Не найдено</p>
         {% endfor %}
     </ul>
-
+    <h4>Выборочные</h4>
+    <ul class="codeLessons">
+        {% for i in changeLessons %}
+            <li class="codeLesson"><a href="{{ i.get_absolute_url }}">{{ i.lesson.title }}</a></li>
+        {% empty %}
+            <p class="Error404">Не найдено</p>
+        {% endfor %}
+    </ul>
+    <h4>Не созданные предметы</h4>
+    <ul class="codeLessons">
+        {% for i in notSelectLessons %}
+            <li class="codeLesson" style="background-color: grey; cursor: default"><a href="">{{ i.title }}</a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}
